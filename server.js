@@ -48,6 +48,9 @@ app.post("/user/:id", async (req, res) => {
     {$set: 
       {VoiceActivity: req.body.VoiceActivity}
     },
+    {$set: 
+      {Username: req.body.Username}
+    },
 
     {$set: 
      {PlayerProgress: req.body.PlayerProgress}

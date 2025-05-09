@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema(
   {
     UserId: String,
+    Username: String,
     VoiceActivity: {
       "QuietLowGain": {type: Number, default: null},
       "QuietMidGain": {type: Number, default: null},
