@@ -44,8 +44,9 @@ app.get("/user/:id", async (req, res) => {
 })
 
 app.post("/user/:id", async (req, res) => {
+  console.log(req)
   await playerModel.findOneAndUpdate(
-    {UserId: `${request.params.id}`},
+    {UserId: `${req.params.id}`},
 
     {$set: 
       {VoiceActivity: req.body.VoiceActivity}
