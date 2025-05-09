@@ -20,19 +20,18 @@ mongoose.connect(process.env.MONGODB_URI, {
 const playerModel = mongoose.model('Player', UserSchema)
 
 app.get("/user/:id", async (req, res) => {
-  console.log("weewoo");
   console.log(`${req.params.id}`);
   async function playerDataCheck(){
-    const playerData = await playerModel.findOne({userId: req.params.id})
+    const playerData = await playerModel.findOne({UserId: req.params.id})
     if (playerData) {
       console.log("FOund one")
       return playerData;
     } else {
       console.log("Creating account")
       const newPlayer = new playerModel({
-        userId: req.params.id,
-        audio: null,
-        userProgress: null
+        UserId: req.params.id,
+        VoiceActivity: null,
+        UserProgress: null
       })
 
       const newPlayerData = await newPlayer.save();
@@ -46,8 +45,15 @@ app.get("/user/:id", async (req, res) => {
 
 app.post("/user/:id", async (req, res) => {
   await playerModel.findOneAndUpdate(
-    {userId: `${request.params.id}`},
-    {$set: {audio: request.body.audio}}
+    {UserId: `${request.params.id}`},
+
+    {$set: 
+      {VoiceActivity: req.body.VoiceActivity}
+    },
+
+    {$set: 
+     {PlayerProgress: req.body.PlayerProgress}
+    }
   ) 
   res.send("Updated Database");
 })
