@@ -17,19 +17,20 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error("MongoDB connection error:", err);
 });
 
-app.get("/userdata", (req, res) => {
-  res.json({});
-});
+const playerModel = mongoose.model('Player', UserSchema)
 
 app.get("/user/:id", async (req, res) => {
+  console.log("weewoo");
+  console.log(`${req.params.id}`);
   async function playerDataCheck(){
-    const playerData = await UserSchema.findOne({userId: `${req.params.userId}`})
-
+    const playerData = await playerModel.findOne({userId: req.params.id})
     if (playerData) {
+      console.log("FOund one")
       return playerData;
     } else {
-      const newPlayer = new UserSchema({
-        userId: `${req.params.id}`,
+      console.log("Creating account")
+      const newPlayer = new playerModel({
+        userId: req.params.id,
         audio: null,
         userProgress: null
       })
@@ -40,10 +41,17 @@ app.get("/user/:id", async (req, res) => {
     }
   }
 
-  res.json(await playerDataCheck);
+  res.json(await playerDataCheck());
 })
 
-app.post("/")
+app.post("/user/:id", async (req, res) => {
+  await playerModel.findOneAndUpdate(
+    {userId: `${request.params.id}`},
+    {$set: {audio: request.body.audio}}
+  ) 
+  res.send("Updated Database");
+})
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
