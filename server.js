@@ -20,16 +20,14 @@ mongoose.connect(process.env.MONGODB_URI, {
 const playerModel = mongoose.model('Player', UserSchema)
 
 app.get("/user/:id", async (req, res) => {
-  console.log(`${req.params.id}`);
   async function playerDataCheck(){
     const playerData = await playerModel.findOne({UserId: req.params.id})
     if (playerData) {
-      console.log("FOund one")
       return playerData;
     } else {
-      console.log("Creating account")
       const newPlayer = new playerModel({
         UserId: req.params.id,
+        Username: null,
         VoiceActivity: null,
         UserProgress: null
       })
@@ -44,7 +42,6 @@ app.get("/user/:id", async (req, res) => {
 })
 
 app.post("/user/:id", async (req, res) => {
-  console.log(req)
   await playerModel.findOneAndUpdate(
     {UserId: `${req.params.id}`},
 
