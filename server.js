@@ -1,7 +1,7 @@
-import user from "./user.js";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import UserSchema from "./user.js";
 
 dotenv.config();
 
@@ -18,13 +18,32 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 app.get("/userdata", (req, res) => {
-  res.json({ message: "Backend is working with MongoDB!" });
+  res.json({});
 });
 
-app.get("/user/:id", (req, res) => {
-  console.log(res);
+app.get("/user/:id", async (req, res) => {
+  async function playerDataCheck(){
+    const playerData = await UserSchema.findOne({userId: `${req.params.userId}`})
+
+    if (playerData) {
+      return playerData;
+    } else {
+      const newPlayer = new UserSchema({
+        userId: `${req.params.id}`,
+        audio: null,
+        userProgress: null
+      })
+
+      const newPlayerData = await newPlayer.save();
+
+      return newPlayerData;
+    }
+  }
+
+  res.json(await playerDataCheck);
 })
 
+app.post("/")
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
