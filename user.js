@@ -4,18 +4,18 @@ const UserSchema = new mongoose.Schema(
   {
     UserId: String,
     VoiceActivity: {
-      "QuietLowGain": null,
-      "QuietMidGain": null,
-      "QuietHighGain": null,
-      "WhisperLowGain": null,
-      "WhisperMidGain": null,
-      "WhisperHighGain": null,
-      "TalkingLowGain": null,
-      "TalkingMidGain": null,
-      "TalkingHighGain": null,
-      "QuietPercentage": null,
-      "WhisperPercentage": null,
-      "TalkingPercentage": null
+      "QuietLowGain": {type: Number, default: null},
+      "QuietMidGain": {type: Number, default: null},
+      "QuietHighGain": {type: Number, default: null},
+      "WhisperLowGain": {type: Number, default: null},
+      "WhisperMidGain": {type: Number, default: null},
+      "WhisperHighGain": {type: Number, default: null},
+      "TalkingLowGain": {type: Number, default: null},
+      "TalkingMidGain": {type: Number, default: null},
+      "TalkingHighGain": {type: Number, default: null},
+      "QuietPercentage": {type: Number, default: null},
+      "WhisperPercentage": {type: Number, default: null},
+      "TalkingPercentage": {type: Number, default: null}
     },
     UserProgress: Number,
   }
