@@ -1,9 +1,11 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  userID: Number,
-  audio: Number,
-  userProgress: Number,
-});
+const UserSchema = new mongoose.Schema(
+  {
+    userID: Number,
+    audio: Number,
+    userProgress: Number,
+  }
+);
 
-module.exports = mongoose.model("User", userSchema);
+export default UserSchema;
