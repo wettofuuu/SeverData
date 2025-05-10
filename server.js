@@ -20,21 +20,20 @@ mongoose.connect(process.env.MONGODB_URI, {
 const playerModel = mongoose.model('Player', UserSchema)
 
 app.get("/user/:id", async (req, res) => {
+  const key = req.headers["api_key"]
+
+  if (!key){
+    return res.status(403).send("Missing API KEY");
+  }
+
+  if (key !== process.env.API_KEY){
+    return res.status(403).send("Invalid API Key");
+  }
+
   async function playerDataCheck(){
     const playerData = await playerModel.findOne({UserId: req.params.id})
     if (playerData) {
       return playerData;
-    } else {
-      const newPlayer = new playerModel({
-        UserId: req.params.id,
-        Username: null,
-        VoiceActivity: null,
-        UserProgress: null
-      })
-
-      const newPlayerData = await newPlayer.save();
-
-      return newPlayerData;
     }
   }
 
@@ -42,17 +41,51 @@ app.get("/user/:id", async (req, res) => {
 })
 
 app.post("/user/:id", async (req, res) => {
-  await playerModel.findOneAndUpdate(
-    {UserId: `${req.params.id}`},
+  const key = req.headers["api_key"]
 
-    {$set: 
-      {VoiceActivity: req.body.VoiceActivity,
-        Username: req.body.Username,
-        UserProgress: req.body.UserProgress
-      }
-    },
-  ) 
-  res.send("Updated Database");
+  if (!key){
+    return res.status(403).send("Missing API KEY");
+  }
+
+  if (key !== process.env.API_KEY){
+    return res.status(403).send("Invalid API Key");
+  }
+
+  
+  try {
+    const {id} = req.params;
+    const {Username, VoiceActivity, UserProgress} = req.body;
+
+    let result = await playerModel.findOneAndUpdate(
+      {UserId: id},
+      {$set: 
+        {VoiceActivity: req.body.VoiceActivity,
+          Username: req.body.Username,
+          UserProgress: req.body.UserProgress
+        }
+      },
+    ) 
+    
+    if (!result) {
+      const newPlayer = new playerModel({
+        UserId: id,
+        Username,
+        VoiceActivity,
+        UserProgress
+      })
+  
+      const newPlayerData = await newPlayer.save();
+  
+      return newPlayerData;
+    }
+
+    res.send("Updated Database");
+  } catch (err){
+    console.log("Error couldn't POST", err);
+    res.status(500).send("Internal Server Error");
+  }
+
+
 })
 
 app.listen(PORT, () => {

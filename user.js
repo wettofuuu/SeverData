@@ -18,6 +18,12 @@ const UserSchema = new mongoose.Schema(
       "WhisperP": {type: Number, default: null},
       "TalkingP": {type: Number, default: null}
     },
+    BadgeData: {
+      "1": {type: Number},
+      "2": {type: Number},
+      "3": {type: Number},
+
+    },
     UserProgress: Number,
   }
 );
