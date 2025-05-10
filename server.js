@@ -28,7 +28,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 const playerModel = mongoose.model('Player', UserSchema)
 
 app.get("/user/sever/v1/:id", async (req, res) => {
-  const key = req.headers["api_key"]
+  const key = req.headers["x-api_key"]
 
   if (!key){
     return res.status(403).send("Missing API KEY");
@@ -49,7 +49,7 @@ app.get("/user/sever/v1/:id", async (req, res) => {
 })
 
 app.post("/user/sever/v1/:id", async (req, res) => {
-  const key = req.headers["api_key"]
+  const key = req.headers["x-api_key"]
 
   if (!key){
     return res.status(403).send("Missing API KEY");
