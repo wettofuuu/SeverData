@@ -2,10 +2,18 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import UserSchema from "./user.js";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
+const limit = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 30,
+  message: "Too many requests."
+})
+
 const app = express();
+app.use(limit);
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
@@ -19,7 +27,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const playerModel = mongoose.model('Player', UserSchema)
 
-app.get("/user/:id", async (req, res) => {
+app.get("/user/sever/v1/:id", async (req, res) => {
   const key = req.headers["api_key"]
 
   if (!key){
@@ -40,7 +48,7 @@ app.get("/user/:id", async (req, res) => {
   res.json(await playerDataCheck());
 })
 
-app.post("/user/:id", async (req, res) => {
+app.post("/user/sever/v1/:id", async (req, res) => {
   const key = req.headers["api_key"]
 
   if (!key){
@@ -51,7 +59,7 @@ app.post("/user/:id", async (req, res) => {
     return res.status(403).send("Invalid API Key");
   }
 
-  
+
   try {
     const {id} = req.params;
     const {Username, VoiceActivity, UserProgress} = req.body;
