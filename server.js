@@ -86,10 +86,10 @@ app.post("/user/sever/v1/:id", async (req, res) => {
   
       const newPlayerData = await newPlayer.save();
   
-      return newPlayerData;
+      return res.json(newPlayerData);
     }
 
-    res.send("Updated Database");
+    res.json({message: "Updated Database"});
   } catch (err){
     console.log("Error couldn't POST", err);
     res.status(500).send("Internal Server Error");
