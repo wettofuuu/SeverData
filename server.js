@@ -46,15 +46,11 @@ app.post("/user/:id", async (req, res) => {
     {UserId: `${req.params.id}`},
 
     {$set: 
-      {VoiceActivity: req.body.VoiceActivity}
+      {VoiceActivity: req.body.VoiceActivity,
+        Username: req.body.Username,
+        UserProgress: req.body.UserProgress
+      }
     },
-    {$set: 
-      {Username: req.body.Username}
-    },
-
-    {$set: 
-     {PlayerProgress: req.body.PlayerProgress}
-    }
   ) 
   res.send("Updated Database");
 })
