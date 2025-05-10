@@ -13,6 +13,7 @@ const limit = rateLimit({
 })
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(limit);
 app.use(express.json());
 
@@ -59,6 +60,7 @@ app.post("/user/sever/v1/:id", async (req, res) => {
     return res.status(403).send("Invalid API Key");
   }
 
+  console.log(req.params, req.body);
 
   try {
     const {id} = req.params;
